@@ -1,0 +1,4 @@
+numpy
+joule
+adafruit-circuitpython-gps
+

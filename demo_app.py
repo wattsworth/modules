@@ -7,29 +7,40 @@ import jinja2
 import os
 from random import randint
 
-from joule.client.reader_module import ReaderModule
+import joule
 
 CSS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'css')
 JS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'js')
 TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'templates')
 
 
-class BootstrapInterface(FilterModule):
+class DemoApp(joule.FilterModule):
 
-    async def setup(self, parsed_args, app, output):
+    async def setup(self, parsed_args, app, inputs, outputs):
         loader = jinja2.FileSystemLoader(TEMPLATES_DIR)
         aiohttp_jinja2.setup(app, loader=loader)
-
-    async def run(self, parsed_args, output):
-        lj_stream = await self.node.data_subscribe("/demo/labjack data")
+        self.lat=None
+        self.long=None
+        self.knob1=None
+        self.knob2=None
+    async def run(self, parsed_args, inputs, outputs):
+        lj_stream = inputs['labjack']
+        gps_stream = inputs['gps']
         
         # data processing...
         while True:
-            lj_data = await lj_stream.read()
+            lj_data = await lj_stream.read(flatten=True)
+            print(lj_data)
+            import pdb
+            pdb.set_trace()
             lj_stream.consume(len(lj_data))
-            self.knob1=lj_data['data'][0]
-            self.knob2=lj_data['data'][2]
-            
+            self.knob1=lj_data[-1,1]
+            self.knob2=lj_data[-1,3]
+            gps_data = await gps_stream.read(flatten=True)
+            gps_stream.consume(len(gps_data))
+            print(gps_data)
+            self.lat = gps_data[-1,1]
+            self.long = gps_data[-1,2]
             await asyncio.sleep(0.1)
 
     def routes(self):
@@ -42,16 +53,18 @@ class BootstrapInterface(FilterModule):
 
     @aiohttp_jinja2.template('index.jinja2')
     async def index(self, request):
-        return {'message': "hello world"}
+        return {}
 
     # json end point for AJAX requests
     async def data(self, request):
-        # return summary statistics, etc.
-        return web.json_response(data={'random_value': randint(0, 10)})
+        return web.json_response(data={'lat': self.lat,
+                                       'long': self.long,
+                                       'knob1': self.knob1,
+                                       'knob2': self.knob2})
 
 
 def main():
-    r = BootstrapInterface()
+    r = DemoApp()
     r.start()
 
 

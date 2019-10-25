@@ -5,11 +5,8 @@ $(function () {
 
 function loadData(){
     $.get("data.json", function (data) {
-        $("#data").text(data['random_value']);
+        $("#data").text("Lat: "+data['lat']+" Long: "+data['long']);
     });
 }
 
-function change_bkgd(){
-    let color = parseInt(Math.random()*0xFFFFFF).toString(16);
-    $(".jumbotron").css("background", "#"+color);
-}
+
