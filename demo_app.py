@@ -30,15 +30,11 @@ class DemoApp(joule.FilterModule):
         # data processing...
         while True:
             lj_data = await lj_stream.read(flatten=True)
-            print(lj_data)
-            import pdb
-            pdb.set_trace()
             lj_stream.consume(len(lj_data))
             self.knob1=lj_data[-1,1]
             self.knob2=lj_data[-1,3]
             gps_data = await gps_stream.read(flatten=True)
             gps_stream.consume(len(gps_data))
-            print(gps_data)
             self.lat = gps_data[-1,1]
             self.long = gps_data[-1,2]
             await asyncio.sleep(0.1)
@@ -62,6 +58,10 @@ class DemoApp(joule.FilterModule):
                                        'knob1': self.knob1,
                                        'knob2': self.knob2})
 
+
+def create_app(loop):
+    r = DemoApp()
+    return r.create_dev_app(loop)
 
 def main():
     r = DemoApp()

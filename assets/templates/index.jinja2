@@ -7,24 +7,21 @@
 {% endblock %}
 
 {% block js %}
+    <script src="assets/js/gauge.min.js"></script>
     <script src="assets/js/index.js"></script>
 {% endblock %}
 
 {% block content %}
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-4">Demo App</h1>
-            <p class="lead">
-                This module uses CSS and Javascript to create an interactive UI
-            </p>
-            <hr class="my-4">
-            <ul class="list-group">
-                <!-- example of AJAX data -->
-                <li class="list-group-item">Dynamic data loaded with AJAX:
-                    <!-- see assets/index.js for AJAX code -->
-                    <span id="data" class="message">&mdash;</span>
-                </li>
-            </ul>
-        </div>
+<div class="row justify-content-center">
+  <table class="table">
+    <tbody>
+      <tr><th>Latitude</th><td><span id="lat"></span></td></tr>
+      <tr><th>Longitude</th><td><span id="long"></span></td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="row">
+    <canvas class="col-6" id="knob1">Knob1</canvas>
+    <canvas class="col-6" id="knob2">Knob2</canvas>
     </div>
 {% endblock %}
