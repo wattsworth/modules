@@ -11,7 +11,7 @@ import adafruit_gps
 import serial
 
 class GPSReader(ReaderModule):
-    "Example reader: generates random values"
+    "Read Lat/Long data from GPS "
 
     def custom_args(self, parser):
         grp = parser.add_argument_group("module",

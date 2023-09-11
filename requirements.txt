@@ -1,4 +1,5 @@
 numpy
 joule
 adafruit-circuitpython-gps
-
+adafruit-circuitpython-bme280
+adafruit-circuitpython-icm20x
