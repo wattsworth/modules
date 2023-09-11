@@ -1,0 +1,29 @@
+{% extends "layout.jinja2" %}
+
+{% block title %} Demo App {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="assets/css/index.css">
+{% endblock %}
+
+{% block js %}
+    <script src="assets/js/gauge.min.js"></script>
+    <script src="assets/js/index.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+<div class="card" style="width:400px; margin-top: 25px" >
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" style="background: #eee; text-align: center"><h4>Printer Status</h4></li>
+    <li class="list-group-item">    
+    <div><canvas id="vibration">Vibration</canvas></div>
+    <div style="text-align: center">RMS Vibration</div>
+    </li>
+    <li class="list-group-item">Temperature: <span id="temperature">&mdash;</span> °C</li>
+    <li class="list-group-item" id="humidity-container">Relative Humidity: <span id="humidity">&mdash;</span>%</li>
+  </ul>
+</div></div></div>
+
+{% endblock %}

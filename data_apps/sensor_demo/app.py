@@ -21,7 +21,7 @@ class AMAfloatApp(joule.FilterModule):
         aiohttp_jinja2.setup(app, loader=loader)
         self.humidity=None
         self.temperature=None
-        self.tilt=None
+        self.rms_vibration=None
 
     async def run(self, parsed_args, inputs, outputs):
         accel_stream = inputs['accelerometer']
@@ -29,17 +29,18 @@ class AMAfloatApp(joule.FilterModule):
         
         # data processing...
         while True:
+            # Vibration Data:
             accel_data = await accel_stream.read()
             accel_stream.consume(len(accel_data))
-            # compute average component in X,Y, and Z
-            x,y,z = np.mean(accel_data['data'],axis=0)
-            # compute roll angle in degrees
-            self.roll = np.rad2deg(np.arctan2(y,x))
+            # 1.) Remove gravity (DC component)
+            vibe_data =  accel_data['data'] - np.mean(accel_data['data'],axis=0)
+            # 2.) Compute RMS value
+            self.rms_vibration = np.mean(np.sqrt(np.sum(vibe_data**2, axis=1)))
             
+            # Environment Data:
             bme280_data = await bme280_stream.read()
             bme280_stream.consume(len(bme280_data))
             self.temperature,self.humidity,_,_ = np.mean(bme280_data['data'],axis=0)
-            print(self.roll,self.temperature,self.humidity)
             await asyncio.sleep(0.1)
 
     def routes(self):
@@ -56,7 +57,7 @@ class AMAfloatApp(joule.FilterModule):
 
     # json end point for AJAX requests
     async def data(self, request):
-        return web.json_response(data={'roll': float(self.roll),
+        return web.json_response(data={'vibration': float(self.rms_vibration),
                                        'temperature': float(self.temperature),
                                        'humidity': float(self.humidity)})
 
