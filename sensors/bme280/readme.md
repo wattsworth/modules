@@ -1,6 +1,6 @@
 # BME280 Temperature Humidity Pressure Sensor
 
-This sensor is available from Adafruit. See https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout for full documentation. 
+This sensor is available from Adafruit. See https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout for full documentation. This code is based on a [ReaderModule](https://wattsworth.net/joule/modules.html#reader-modules) which provides a single output stream and is the simplest module type.
 
 ## Usage
 1. Install the Adafruit BME280 library system-wide: https://github.com/adafruit/Adafruit_CircuitPython_BME280
