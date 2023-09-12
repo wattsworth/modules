@@ -1,5 +1,7 @@
 # Sensor Demo
-This Data Application provides a simple dashboard to visualize environmental data collected by a BME280 and ICM20948 sensor. A gauge shows RMS vibration in low, medium, and high range and the current temperature and humidity are displayed below. When the humidity rises above 75% the background is changed to red to indicate a potentially hazadous condition. 
+This Data Application is based on the [Bootstrap App](https://wattsworth.net/joule/modules.html#bootstrap-interface) example and provides a simple dashboard to visualize environmental data collected by a BME280 and ICM20948 sensor. A gauge shows RMS vibration in low, medium, and high range and the current temperature and humidity are displayed below. When the humidity rises above 75% the background is changed to red to indicate a potentially hazadous condition.
+
+![Dashboard](sensor_demo.gif)
 
 ## Usage
 1. Configure the [BME280](/sensors/bme280/readme.md) and [ICM20948](/sensors/icm20948/readme.md) data readers and check the stream configuration matches the following setup. If you want a different configuration modify the ``module.conf`` file accordingly.
@@ -50,15 +52,7 @@ is_app = yes
     sudo service joule restart
     joule module list # ensure Sensor Demo is listed in the output
 ```
+## Vibration Events
+Any high vibration events are added to an event stream which can be displayed along with the sensor data streams as shown below. To create this plot in Lumen, add two copies of the high vibration event stream and use the filter to display medium vibration ``1<X<=10`` with a yellow background and high vibration ``x>10`` with a red background. The event height is set to the vibration level and associated with the same axis as the accelerometer stream (in this case the left axis). 
 
-## Demo
-Refresh the Lumen node to add the Sensor Demo app. The dashboard shows the current sensor readings and any high vibration events are added to an event stream which can be displayed
-along with the sensor data streams as shown below:
-
-
-![Dashboard](sensor_demo.gif)
-
-**Event Stream plotted with Accelerometer Data:** To create this plot add two copies of the high vibration event stream and use the filter to display medium vibration ``1<X<=10`` with a yellow background and high vibration ``x>10`` with a red background. The event height is set to the vibration level and associated with the same axis as the accelerometer stream (in this case the left axis). 
 ![Plot with High Vibration Events](sensor_demo_plot.png)
-
-
