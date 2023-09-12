@@ -27,10 +27,11 @@ exec_cmd = /path/to/reader.py <=== change this
 ...more configuration...
 ```
   
-5. Copy ``module.conf`` to ``/etc/joule/module_configs`` to add this module to Joule. 
+5. Copy ``module.conf`` to ``/etc/joule/module_configs`` to add this module to Joule.
 
 ```shell
     sudo cp module.conf /etc/joule/module_configs/bme280.conf
+    adduser joule i2c # grant the joule user access to i2c devices (may not be necessary depending on your configuration)
     sudo service joule restart
     joule module list # ensure BME280 Reader is listed in the output
 ```
