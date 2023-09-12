@@ -32,7 +32,7 @@ exec_cmd = /path/to/reader.py <=== change this
    to add this module to Joule. Modify the stream paths to match your desired configuration:
 
 ```shell
-    sudo cp module.conf /etc/joule/module_configs/bme280.conf
+    sudo cp module.conf /etc/joule/module_configs/icm20948.conf
     sudo cp streams/*.conf /etc/joule/stream_configs
     sudo service joule restart
     joule module list # ensure ICM20948 Reader is listed in the output
