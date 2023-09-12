@@ -24,6 +24,7 @@ joule module list
    values displayed on stdout. If you are working on the local machine open http://localhost:8000 to view the page. Otherwise replace ``localhost`` with the appropriate IP address. This configuration is mostly useful during module development:
 ```shell
 ./app.py --module_config=./module.conf --live
+# application output...
 starting web server at 0.0.0.0:8000
 Running filter on live input data
 starting web server at 0.0.0.0:8000
