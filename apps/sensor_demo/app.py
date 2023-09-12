@@ -41,6 +41,10 @@ class AMAfloatApp(joule.FilterModule):
         while True:
             # Vibration Data:
             accel_data = await accel_stream.read()
+            if len(accel_data) == 0:
+                print("warning: no data in accelerometer stream")
+                await asyncio.sleep(1)
+                continue # no data yet
             accel_stream.consume(len(accel_data)-1) # leave last sample to keep timestamps continuous
             # 1.) Remove gravity (DC component)
             vibe_data =  accel_data['data'] - np.mean(accel_data['data'],axis=0)
