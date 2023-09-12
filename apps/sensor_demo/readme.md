@@ -56,4 +56,9 @@ Refresh the Lumen node to add the Sensor Demo app. The dashboard shows the curre
 along with the sensor data streams as shown below:
 
 
+![Dashboard](sensor_demo.gif)
+
+**Event Stream plotted with Accelerometer Data:** To create this plot add two copies of the high vibration event stream and use the filter to display medium vibration ``1<X<=10`` with a yellow background and high vibration ``x>10`` with a red background. The event height is set to the vibration level and associated with the same axis as the accelerometer stream (in this case the left axis). 
+![Plot with High Vibration Events](sensor_demo_plot.png)
+
 
