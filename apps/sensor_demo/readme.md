@@ -51,7 +51,10 @@ is_app = yes
 ```shell
     sudo cp module.conf /etc/joule/module_configs/sensor_demo.conf
     sudo service joule restart
+
+    # confirm proper operation:
     joule module list # ensure Sensor Demo is listed in the output
+    joule module logs "Sensor Demo" # make sure there are no error messages
 ```
 ## Vibration Events
 Any high vibration events are added to an event stream which can be displayed along with the sensor data streams as shown below. To create this plot in Lumen, add two copies of the high vibration event stream and use the filter to display medium vibration ``1<X<=10`` with a yellow background and high vibration ``x>10`` with a red background. The event height is set to the vibration level and associated with the same axis as the accelerometer stream (in this case the left axis). 

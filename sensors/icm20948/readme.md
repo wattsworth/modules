@@ -29,11 +29,16 @@ exec_cmd = /path/to/reader.py <=== change this
 ```
   
 5. Copy ``module.conf`` to ``/etc/joule/module_configs`` and all of the stream ``*.conf`` files to ``/etc/joule/stream_configs``
-   to add this module to Joule. Modify the stream paths to match your desired configuration:
+   to add this module to Joule. Also ensure the ``joule`` user has permission to access i2c devices:
 
 ```shell
     sudo cp module.conf /etc/joule/module_configs/icm20948.conf
     sudo cp streams/*.conf /etc/joule/stream_configs
+    sudo adduser joule i2c # grant access to i2c devices (may depend on your configuration)
     sudo service joule restart
+
+    
+    # confirm proper operation:
     joule module list # ensure ICM20948 Reader is listed in the output
+    joule module logs "ICM20948 Reader" # make sure there are no error messages
 ```
