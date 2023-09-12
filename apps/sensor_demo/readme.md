@@ -24,11 +24,16 @@ joule module list
 ./app.py --module_config=./module.conf --live
 starting web server at 0.0.0.0:8000
 Running filter on live input data
+starting web server at 0.0.0.0:8000
+Running filter on live input data
+# logs any high vibration events...
+High vibration: 2.4989116191864014 m/s^2
+High vibration: 5.850946426391602 m/s^2
+High vibration: 4.885771751403809 m/s^2
 # Ctrl-C to exit
 ```
    
-3. Replace the **exec_cmd** parameter in ``module.conf`` with the full path to ``app.py`` and change any other
-   settings to customize your configuration:
+3. Replace the **exec_cmd** parameter in ``module.conf`` with the full path to ``app.py`` and change any other settings to customize your configuration:
    
 ```ini
 name = Sensor Demo
@@ -45,4 +50,10 @@ is_app = yes
     sudo service joule restart
     joule module list # ensure Sensor Demo is listed in the output
 ```
+
+## Demo
+Refresh the Lumen node to add the Sensor Demo app. The dashboard shows the current sensor readings and any high vibration events are added to an event stream which can be displayed
+along with the sensor data streams as shown below:
+
+
 

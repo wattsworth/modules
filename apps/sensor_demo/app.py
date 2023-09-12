@@ -8,6 +8,7 @@ import os
 import numpy as np
 
 import joule
+from joule.api import Event
 
 CSS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'css')
 JS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'js')
@@ -16,32 +17,48 @@ TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'templates')
 
 class AMAfloatApp(joule.FilterModule):
 
+    def custom_args(self, parser):
+                grp = parser.add_argument_group("module",
+                                                "module specific arguments")
+                grp.add_argument("--event_stream",
+                                 required=True,
+                                 help="high vibration events")
+                
     async def setup(self, parsed_args, app, inputs, outputs):
         loader = jinja2.FileSystemLoader(TEMPLATES_DIR)
         aiohttp_jinja2.setup(app, loader=loader)
-        self.humidity=None
-        self.temperature=None
-        self.rms_vibration=None
+        self.humidity=0
+        self.temperature=0
+        self.rms_vibration=0
+        self.event_stream = await self.node.event_stream_get(parsed_args.event_stream,
+                                                             create=True,
+                                                             event_fields={"RMS Vibration":"numeric"})
 
     async def run(self, parsed_args, inputs, outputs):
         accel_stream = inputs['accelerometer']
         bme280_stream = inputs['bme280']
-        
         # data processing...
         while True:
             # Vibration Data:
             accel_data = await accel_stream.read()
-            accel_stream.consume(len(accel_data))
+            accel_stream.consume(len(accel_data)-1) # leave last sample to keep timestamps continuous
             # 1.) Remove gravity (DC component)
             vibe_data =  accel_data['data'] - np.mean(accel_data['data'],axis=0)
             # 2.) Compute RMS value
-            self.rms_vibration = np.mean(np.sqrt(np.sum(vibe_data**2, axis=1)))
-            
+            self.rms_vibration = float(np.mean(np.sqrt(np.sum(vibe_data**2, axis=1))))
+            # 3.) If vibration is higher than 1m/s^2 log the event
+            if self.rms_vibration > 1:
+                high_vibe_event = Event(content={'RMS Vibration': self.rms_vibration},
+                                        start_time=accel_data['timestamp'][0],
+                                        end_time = accel_data['timestamp'][-1])
+                await self.node.event_stream_write(self.event_stream,
+                                                    [high_vibe_event])
+                print(f"High vibration: {self.rms_vibration} m/s^2")
             # Environment Data:
             bme280_data = await bme280_stream.read()
             bme280_stream.consume(len(bme280_data))
             self.temperature,self.humidity,_,_ = np.mean(bme280_data['data'],axis=0)
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(1)
 
     def routes(self):
         return [
