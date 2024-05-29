@@ -7,14 +7,14 @@ import jinja2
 import os
 from random import randint
 
-import joule
+import joule.client
 
 CSS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'css')
 JS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'js')
 TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'templates')
 
 
-class DemoApp(joule.FilterModule):
+class DemoApp(joule.client.FilterModule):
 
     async def setup(self, parsed_args, app, inputs, outputs):
         loader = jinja2.FileSystemLoader(TEMPLATES_DIR)

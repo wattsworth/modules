@@ -7,7 +7,7 @@ import jinja2
 import os
 import numpy as np
 
-import joule
+import joule.client
 from joule.api import Event
 
 CSS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'css')
@@ -15,7 +15,7 @@ JS_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'js')
 TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), 'assets', 'templates')
 
 
-class AMAfloatApp(joule.FilterModule):
+class AMAfloatApp(joule.client.FilterModule):
 
     def custom_args(self, parser):
                 grp = parser.add_argument_group("module",
